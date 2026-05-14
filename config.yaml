@@ -1,0 +1,26 @@
+data:
+  input_path: data/publications.csv
+  output_dir: outputs
+  cache_dir: cache
+
+embedding:
+  # Options (fastest → best quality):
+  #   sentence-transformers/all-MiniLM-L6-v2      (fast, ~80% quality)
+  #   sentence-transformers/all-mpnet-base-v2      (balanced, default)
+  #   BAAI/bge-large-en-v1.5                       (high quality)
+  model: sentence-transformers/all-mpnet-base-v2
+  batch_size: 32
+
+pipeline:
+  min_articles: 5
+  # Distance method used to compare journalists:
+  #   mean         — cosine distance between mean-pooled article embeddings (fast)
+  #   wasserstein  — sliced Wasserstein distance between article distributions (slow)
+  #   mmd          — Maximum Mean Discrepancy with RBF kernel (slow)
+  aggregation: mean
+  n_clusters: 6                  # for hierarchical clustering (capped at n journalists)
+  wasserstein_projections: 50    # random projections for sliced Wasserstein
+
+umap:
+  n_neighbors: 10
+  min_dist: 0.1
